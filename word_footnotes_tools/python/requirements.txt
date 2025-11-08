@@ -1,0 +1,18 @@
+# متطلبات سكربتات استخراج واستعادة الحواشي السفلية
+# Requirements for footnote extraction and restoration scripts
+
+# لمعالجة ملفات XML في مستندات Word
+# For processing XML in Word documents
+lxml>=4.9.0
+
+# اختياري: لمعالجة مستندات Word بطريقة أسهل (محدود للحواشي)
+# Optional: For easier Word document processing (limited for footnotes)
+python-docx>=0.8.11
+
+# للتعامل مع الملفات والمسارات
+# For file and path handling (built-in, no installation needed)
+# pathlib (مدمج في Python 3)
+
+# للتعامل مع ملفات ZIP (ملفات Word)
+# For handling ZIP files (Word files) (built-in, no installation needed)
+# zipfile (مدمج في Python)
