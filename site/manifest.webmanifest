@@ -1,0 +1,25 @@
+{
+  "name": "بصائر: القرآن الكريم ومصاحفه وعلومه",
+  "short_name": "بصائر",
+  "description": "مصحف التجويد الملوّن، وبطاقات السور، والروايات، وعلوم الآية.",
+  "lang": "ar",
+  "dir": "rtl",
+  "id": "./",
+  "start_url": "./index.html?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "background_color": "#f5f6f8",
+  "theme_color": "#2b4f8c",
+  "categories": ["books", "education"],
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "مصحف التجويد", "url": "./tajweed.html", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]},
+    {"name": "بطاقات السور", "url": "./surah.html", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]}
+  ]
+}

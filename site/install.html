@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ثبّت بصائر · بصائر</title>
+<meta name="description" content="ثبّت موقع بصائر تطبيقًا على هاتفك أو حاسوبك، يفتح من أيقونته ويعمل دون اتصال في الصفحات التي زرتها.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2b4f8c">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/basaer.css">
+<style>
+.page{display:grid;gap:28px;padding-block:28px}
+.intro{display:grid;gap:12px;max-width:70ch}
+.intro h1{font-size:2rem;color:var(--brand)}
+.why{display:flex;flex-wrap:wrap;gap:8px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:none;padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;color:var(--muted);font-weight:500}
+.tabs button[aria-selected="true"]{color:var(--brand);border-bottom-color:var(--gold)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;display:grid;gap:14px;scroll-margin-top:80px}
+.panel h2{font-size:1.2rem}
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:12px}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+ol.steps li::before{content:counter(s,arabic-indic);width:34px;height:34px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font-weight:600}
+kbd{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:0 6px;font-family:inherit}
+#native{justify-self:start}
+</style>
+</head>
+<body>
+<main class="wrap page" id="main" tabindex="-1">
+  <section class="intro">
+    <h1>ثبّت بصائر على جهازك</h1>
+    <p>يصير الموقع تطبيقًا له أيقونة على الشاشة الرئيسية أو سطح المكتب، ويفتح في نافذته الخاصة، ويحفظ الصفحات التي زرتها لتقرأها دون اتصال. لا متجر ولا تنزيل كبير.</p>
+    <div class="why"><span class="chip ok">مجاني</span><span class="chip ok">بلا إعلانات</span><span class="chip ok">يعمل دون اتصال في ما زرته</span><span class="chip ok">يتحدّث تلقائيًّا</span></div>
+    <button class="btn primary" type="button" id="native" hidden>ثبّت الآن</button>
+    <p class="b-msg" id="state"></p>
+  </section>
+  <div class="tabs" role="tablist" aria-label="نوع الجهاز">
+    <button role="tab" id="t-android" aria-controls="android" aria-selected="true">أندرويد</button>
+    <button role="tab" id="t-ios" aria-controls="ios" aria-selected="false">آيفون وآيباد</button>
+    <button role="tab" id="t-desktop" aria-controls="desktop" aria-selected="false">ويندوز وماك</button>
+  </div>
+  <section class="panel" id="android" role="tabpanel" aria-labelledby="t-android">
+    <h2>على أندرويد (كروم أو سامسونج إنترنت أو إيدج)</h2>
+    <ol class="steps">
+      <li><span>افتح بصائر في المتصفح.</span></li>
+      <li><span>اضغط زر «ثبّت الموقع تطبيقًا على هاتفك» في أسفل الصفحة. أو افتح قائمة المتصفح <kbd>⋮</kbd> واختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».</span></li>
+      <li><span>وافق على «تثبيت». تظهر أيقونة بصائر بين تطبيقاتك.</span></li>
+    </ol>
+  </section>
+  <section class="panel" id="ios" role="tabpanel" aria-labelledby="t-ios" hidden>
+    <h2>على آيفون وآيباد (سفاري)</h2>
+    <ol class="steps">
+      <li><span>افتح بصائر في <b>سفاري</b>. (في الإصدارات الحديثة من iOS يعمل أيضًا من كروم.)</span></li>
+      <li><span>اضغط زر المشاركة <kbd>⬆︎</kbd> في أسفل الشاشة أو أعلاها.</span></li>
+      <li><span>اختر «إضافة إلى الشاشة الرئيسية»، ثم «إضافة».</span></li>
+    </ol>
+  </section>
+  <section class="panel" id="desktop" role="tabpanel" aria-labelledby="t-desktop" hidden>
+    <h2>على ويندوز وماك</h2>
+    <ol class="steps">
+      <li><span><b>إيدج أو كروم:</b> اضغط أيقونة التثبيت في شريط العنوان، أو زر «ثبّت الموقع تطبيقًا على حاسوبك» في أسفل الصفحة.</span></li>
+      <li><span>وافق على «تثبيت». يُضاف بصائر إلى قائمة ابدأ في ويندوز، ويمكنك تثبيته في شريط المهام.</span></li>
+      <li><span><b>سفاري على ماك:</b> من قائمة «ملف» اختر «إضافة إلى Dock».</span></li>
+    </ol>
+  </section>
+</main>
+<script src="assets/basaer.js" defer></script>
+<script>
+(function () {
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  const select = (id) => tabs.forEach((t) => {
+    const on = t.getAttribute("aria-controls") === id;
+    t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1;
+    document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+  });
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => select(t.getAttribute("aria-controls")));
+    t.addEventListener("keydown", (e) => {
+      const d = e.key === "ArrowLeft" ? 1 : e.key === "ArrowRight" ? -1 : 0;
+      if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); n.click(); }
+    });
+  });
+  const ua = navigator.userAgent;
+  const ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const guess = ["android", "ios", "desktop"].includes(location.hash.slice(1)) ? location.hash.slice(1) : ios ? "ios" : /Android/.test(ua) ? "android" : "desktop";
+  select(guess);
+
+  const state = document.getElementById("state"), btn = document.getElementById("native");
+  if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) state.textContent = "بصائر مثبّت على هذا الجهاز وتفتحه الآن تطبيقًا.";
+  let deferred = null;
+  addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); deferred = e; btn.hidden = false; });
+  btn.addEventListener("click", async () => {
+    if (!deferred) return;
+    deferred.prompt();
+    const choice = await deferred.userChoice.catch(() => null);
+    state.textContent = choice?.outcome === "accepted" ? "ثُبّت بصائر. ستجده بين تطبيقاتك." : "لم يُثبَّت. يمكنك التثبيت لاحقًا من الزر نفسه.";
+    deferred = null; btn.hidden = true;
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>المصادر والتراخيص · بصائر</title>
+<meta name="description" content="مصدر كل نص وبيان في بصائر، وترخيصه، وما أضفناه إليه، والمصادر المحال إليها في بطاقات السور.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2b4f8c">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/basaer.css">
+<style>
+.page{display:grid;gap:32px;padding-block:28px}
+.intro{display:grid;gap:10px;max-width:75ch}
+.intro h1{font-size:2rem;color:var(--brand)}
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;list-style:none;margin:0;padding:0}
+.principles li{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:grid;gap:4px}
+.principles b{font-family:var(--f-display);font-weight:500;color:var(--brand)}
+.group{display:grid;gap:12px}
+.group h2{font-size:1.3rem}
+.src{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;display:grid;gap:10px}
+.src header{display:flex;gap:10px;justify-content:space-between;align-items:start;flex-wrap:wrap}
+.src h3{font-size:1.08rem;max-width:60ch}
+.kv{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;font-size:.94rem}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.files{display:flex;flex-wrap:wrap;gap:6px}
+.files code{background:var(--surface-2);border-radius:6px;padding:1px 8px;font-size:.82rem;direction:ltr}
+.ours{border-inline-start:3px solid var(--gold);padding-inline-start:12px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:420px}
+th,td{padding:9px 14px;text-align:right;border-bottom:1px solid var(--line)}
+th{font-size:.82rem;color:var(--muted);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+.bar{display:inline-block;height:8px;border-radius:4px;background:var(--gold);vertical-align:middle}
+</style>
+</head>
+<body>
+<main class="wrap page" id="main" tabindex="-1">
+  <section class="intro">
+    <h1>المصادر والتراخيص</h1>
+    <p>كل نص في بصائر له مصدر معلوم. نذكر هنا مصدر كل ملف، وترخيصه، وما أضفناه إليه، ونسرد المصادر التي أحالت إليها بطاقات السور.</p>
+    <p class="muted" id="updated"></p>
+  </section>
+  <ul class="principles">
+    <li><b>النقل بلفظ المصدر</b><span>لا نغيّر نص آية ولا خبر. وما نصحّحه من خطأ تقني نذكره في «ما أضفناه».</span></li>
+    <li><b>الإحالة في الموضع</b><span>كل حديث في بطاقات السور مُحال إلى مخرّجه في سطره.</span></li>
+    <li><b>فصل الصحيح عن الضعيف</b><span>تُعرض الفضائل في ثلاث مراتب: ما صحّ، وما ضعُف، والآثار والأقوال.</span></li>
+    <li><b>الفحص الآلي</b><span>تُطابَق حروف مصحف التجويد مع مصحف المدينة آيةً آية قبل كل نشر.</span></li>
+  </ul>
+  <div id="groups"></div>
+  <section class="group" aria-labelledby="cited-h">
+    <h2 id="cited-h">المصادر المحال إليها في بطاقات السور</h2>
+    <p class="muted">مستخرجة آليًّا من الإحالات الواردة بين معقوفين في نصوص البطاقات، مع عدد مرات الإحالة.</p>
+    <div class="tbl"><table><thead><tr><th>المصدر</th><th>الإحالات</th></tr></thead><tbody id="cited"></tbody></table></div>
+  </section>
+  <p>وجدت مصدرًا ناقصًا أو إحالة غير دقيقة؟ <button class="btn" type="button" data-open="report">أبلغ عن ملاحظة</button></p>
+</main>
+<script src="assets/basaer.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const B = window.Basaer;
+  const STATUS = { confirmed: ['ok', 'موثّق'], to_confirm: ['warn', 'يحتاج تأكيدًا'] };
+  fetch("data/sources.json").then((r) => r.json()).then((s) => {
+    document.getElementById("updated").textContent = "آخر تحديث: " + s.updated;
+    document.getElementById("groups").innerHTML = s.groups.map((g) => `<section class="group"><h2>${B.esc(g.title)}</h2>${g.items.map((it) => {
+      const [cls, label] = STATUS[it.status] || STATUS.to_confirm;
+      return `<article class="src"><header><h3>${B.esc(it.title)}</h3><span class="chip ${cls}">${label}</span></header>
+        <dl class="kv">
+          <dt>الجهة</dt><dd>${B.esc(it.publisher) || '<span class="muted">يُستكمل</span>'}</dd>
+          <dt>الترخيص</dt><dd>${it.license_url ? `<a href="${B.esc(it.license_url)}" target="_blank" rel="noopener">${B.esc(it.license)}</a>` : (B.esc(it.license) || '<span class="muted">يُستكمل</span>')}</dd>
+          <dt>الملفات</dt><dd><div class="files">${it.files.map((f) => `<code>${B.esc(f.split("/").pop())}</code>`).join("")}</div></dd>
+        </dl>
+        ${it.our_work ? `<p class="ours"><b>ما أضفناه:</b> ${B.esc(it.our_work)}</p>` : ""}
+        ${it.fields_to_confirm ? `<p class="muted">يُستكمل: ${it.fields_to_confirm.map(B.esc).join("؛ ")}</p>` : ""}</article>`;
+    }).join("")}</section>`).join("");
+    const max = Math.max(...s.cited_in_cards.map((c) => c.count));
+    document.getElementById("cited").innerHTML = s.cited_in_cards.map((c) => `<tr><td>${B.esc(c.work)}</td><td class="num"><span class="bar" style="width:${Math.max(4, c.count / max * 160)}px"></span> ${B.arNum(c.count)}</td></tr>`).join("");
+  }).catch(() => { document.getElementById("groups").innerHTML = '<p class="b-empty">تعذّر تحميل سجل المصادر.</p>'; });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>بطاقات السور · بصائر</title>
+<meta name="description" content="بطاقة لكل سورة: النزول ومراحله، والمقصد المحوري، وأسباب النزول، والفضائل مفصولًا صحيحها عن ضعيفها، والناسخ والمنسوخ، مع مصادر كل معلومة.">
+<meta property="og:title" content="بطاقات السور · بصائر">
+<meta property="og:description" content="كل ما يتصل بالسورة في بطاقة واحدة، بمصادره.">
+<meta property="og:image" content="icons/og.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2b4f8c">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/basaer.css">
+<style>
+.page{display:grid;gap:28px;padding-block:28px}
+.picker{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.picker select{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 10px;min-width:0}
+.hero{display:grid;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px clamp(16px,3vw,32px)}
+.hero .name{font-family:var(--f-quran);font-size:clamp(2.4rem,6vw,3.4rem);line-height:1.4;color:var(--brand)}
+.hero .en{color:var(--muted);direction:ltr;text-align:right}
+.facts{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.facts div{flex:1 1 150px;padding:10px 14px;display:grid;border-inline-start:1px solid var(--line);border-top:1px solid var(--line);margin-inline-start:-1px;margin-top:-1px}
+.facts b{font-family:var(--f-display);font-size:1.15rem;font-variant-numeric:tabular-nums}
+.facts span{font-size:.82rem;color:var(--muted)}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:820px){.layout{grid-template-columns:minmax(0,1fr)}.toc{position:static!important}}
+.toc{position:sticky;top:calc(74px + env(safe-area-inset-top,0px));display:grid;gap:2px;font-size:.92rem}
+.toc a{padding:5px 10px;border-radius:8px;text-decoration:none;color:var(--muted);border-inline-start:2px solid transparent}
+.toc a.on{color:var(--brand);border-inline-start-color:var(--gold);background:var(--surface)}
+.sec{display:grid;gap:12px;scroll-margin-top:80px}
+.sec h2{font-size:1.3rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sec h3{font-size:1.02rem;color:var(--gold)}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;display:grid;gap:12px;min-width:0}
+.purpose{font-size:1.15rem;line-height:1.9;border-inline-start:4px solid var(--gold)}
+.prose{max-width:72ch;overflow-wrap:anywhere}
+.prose p+p{margin-top:10px}
+.item{display:grid;gap:4px;padding-block:10px;border-top:1px solid var(--line)}
+.item:first-child{border-top:0;padding-top:0}
+.item b{font-weight:600}
+.cite{color:var(--muted);font-size:.86rem;white-space:nowrap}
+.aya{font-family:var(--f-quran);font-size:1.15em;color:var(--brand)}
+.kv{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:8px 16px}
+.kv dt{color:var(--muted);font-size:.9rem}
+.kv dd{margin:0}
+details.box summary{cursor:pointer;font-weight:600;color:var(--brand)}
+.sources{display:flex;flex-wrap:wrap;gap:8px}
+.sources span{background:var(--surface-2);border-radius:999px;padding:3px 12px;font-size:.88rem}
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.grid114{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.grid114 a{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-decoration:none;color:var(--ink);display:grid}
+.grid114 a b{font-family:var(--f-quran);font-size:1.35rem;font-weight:400;color:var(--brand)}
+.grid114 a span{font-size:.8rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<main class="wrap page" id="main" tabindex="-1">
+  <div class="picker">
+    <label for="pick">السورة</label>
+    <select id="pick"></select>
+    <a class="btn" id="to-index" href="#">كل السور</a>
+  </div>
+  <div id="view"><p class="muted">تُحمَّل البطاقات…</p></div>
+</main>
+<script src="assets/basaer.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const { esc, arNum } = window.Basaer;
+  const view = document.getElementById("view"), pick = document.getElementById("pick");
+  let cards = [];
+
+  // Turn the sheet's lightly marked-up text into safe HTML: <br> breaks, numbered items,
+  // ﴿…﴾ Quran quotes and [..] citations. Everything else is escaped.
+  function rich(raw) {
+    if (!raw) return "";
+    const inline = (s) => esc(s)
+      .replace(/﴿([^﴾]+)﴾/g, '<span class="aya">﴿$1﴾</span>')
+      .replace(/\[([^\[\]]{2,160})\]/g, '<span class="cite">[$1]</span>');
+    const blocks = String(raw).split(/<br\s*\/?>\s*<br\s*\/?>|\n\s*\n/).map((b) => b.trim()).filter(Boolean);
+    return blocks.map((b) => {
+      const parts = b.split(/<br\s*\/?>|\n/).map((x) => x.trim()).filter(Boolean);
+      const m = parts[0].match(/^(\d+)[.)]\s*(.+)$/);
+      if (m && parts.length > 1) return `<div class="item"><b>${inline(m[2])}</b><p>${parts.slice(1).map(inline).join("<br>")}</p></div>`;
+      if (/^•/.test(b)) return b.split("•").map((x) => x.trim()).filter(Boolean).map((x) => `<div class="item"><p>${inline(x)}</p></div>`).join("");
+      return `<p>${parts.map(inline).join("<br>")}</p>`;
+    }).join("");
+  }
+  const sec = (id, title, html, chip) => html ? `<section class="sec" id="${id}"><h2>${title}${chip || ""}</h2>${html}</section>` : "";
+  const box = (html, cls = "") => html ? `<div class="box prose ${cls}">${html}</div>` : "";
+
+  function renderIndex() {
+    document.title = "بطاقات السور · بصائر";
+    view.innerHTML = `<section class="sec"><h2>بطاقات السور</h2>
+      <p class="muted prose">لكل سورة بطاقة تجمع نزولها ومقصدها وأسباب نزولها وفضائلها، مفصولًا ما صحّ عمّا ضعُف، مع الإحالة إلى مصدر كل خبر.</p>
+      <div class="grid114">${cards.map((c) => `<a href="#${c.n}"><b>${esc(c.name)}</b><span>${arNum(c.n)} · ${esc(c.type)} · ${arNum(c.ayat)} آية</span></a>`).join("")}</div></section>`;
+  }
+
+  function render(n) {
+    const c = cards[n - 1];
+    if (!c) return renderIndex();
+    pick.value = n;
+    document.title = `سورة ${c.name} · بطاقات السور · بصائر`;
+    const facts = [
+      [c.type, "مكية أم مدنية"], [arNum(c.ayat), "آية"], [arNum(c.words), "كلمة"], [arNum(c.letters), "حرفًا"],
+      [c.juz_hizb, "الجزء والحزب"], [c.page_from === c.page_to ? arNum(c.page_from) : `${arNum(c.page_from)}–${arNum(c.page_to)}`, "الصفحة في مصحف المدينة"],
+      [arNum(c.revelation_order), "ترتيبها في النزول"], [c.category, "فئتها"], [arNum(c.rukus), "ركوعات"], [arNum(c.hasanat), "حسنةً بعدد حروفها (الحرف بعشر)"]
+    ].filter(([v]) => v != null && v !== "");
+    const virtues = [
+      c.virtues_sahih && `<h3>ما صحّ وثبت <span class="chip ok">صحيح</span></h3><div class="prose">${rich(c.virtues_sahih)}</div>`,
+      c.virtues_daif && `<h3>ما ورد فيها من الضعيف <span class="chip warn">ضعيف</span></h3><div class="prose">${rich(c.virtues_daif)}</div>`,
+      c.virtues_sayings && `<h3>أقوال في فضلها <span class="chip note">آثار وأقوال</span></h3><div class="prose">${rich(c.virtues_sayings)}</div>`
+    ].filter(Boolean).join("");
+    const parts = [
+      ["purpose", "المقصد المحوري", c.purpose && box(rich(c.purpose), "purpose")],
+      ["nuzul", "النزول", `<div class="box"><dl class="kv">
+          ${c.revelation_place ? `<dt>مكان النزول</dt><dd>${esc(c.revelation_place)}</dd>` : ""}
+          ${c.revealed_after ? `<dt>ترتيبه</dt><dd>${esc(c.revealed_after)}</dd>` : ""}
+          ${c.stage ? `<dt>المرحلة</dt><dd>${esc(c.stage)}</dd>` : ""}
+          ${c.context ? `<dt>السياق والأحداث</dt><dd>${esc(c.context)}</dd>` : ""}</dl></div>`],
+      ["sabab", "سبب النزول", (c.reason_brief || c.reason_db) && `<div class="box prose">${rich(c.reason_brief)}${c.reason_db ? `<details><summary>الرواية المسندة</summary><div class="prose" style="margin-top:8px">${rich(c.reason_db)}</div></details>` : ""}</div>`],
+      ["fadail", "الفضائل", (virtues || c.virtues_summary) && `<div class="box">${c.virtues_summary ? `<h3>خلاصة</h3><div class="prose">${rich(c.virtues_summary)}</div>` : ""}${virtues}</div>
+        ${c.guidance ? `<div class="box prose"><h3>من هدي القرآن وفضائله العامة</h3>${rich(c.guidance)}</div>` : ""}
+        ${c.virtues ? `<details class="box"><summary>النص الجامع لفضائل السورة</summary><div class="prose">${rich(c.virtues)}${c.virtues_extra ? "<hr>" + rich(c.virtues_extra) : ""}</div></details>` : ""}`],
+      ["naskh", "الناسخ والمنسوخ", c.naskh && box(rich(c.naskh))],
+      ["en", "In English", c.remarks_en && `<details class="box"><summary>Surah notes</summary><div class="prose" dir="ltr" style="text-align:left">${rich(c.remarks_en)}</div></details>`],
+      ["sources", "مصادر هذه البطاقة", c.cited.length ? `<div class="box"><div class="sources">${c.cited.map((s) => `<span>${esc(s.work)} <b class="num">${arNum(s.count)}</b></span>`).join("")}</div><p class="muted">الرقم عدد الإحالات إلى المصدر في هذه البطاقة. إعداد البطاقات: مصطفى يعقوب. <a href="sources.html">المصادر والتراخيص</a></p></div>` : ""]
+    ].filter(([, , html]) => html);
+    view.innerHTML = `
+      <div class="hero"><div><div class="name">سورة ${esc(c.name)}</div><div class="en">${esc(c.n)}. ${esc(c.name_en)}</div></div>
+        <div class="facts">${facts.map(([v, l]) => `<div><b>${esc(v)}</b><span>${l}</span></div>`).join("")}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn primary" href="tajweed.html#s${c.n}">اقرأ السورة بالتجويد</a></div></div>
+      <div class="layout"><nav class="toc" aria-label="أقسام البطاقة">${parts.map(([id, t]) => `<a href="#${c.n}/${id}" data-sec="${id}">${t}</a>`).join("")}</nav>
+        <div style="display:grid;gap:28px;min-width:0">${parts.map(([id, t, html]) => sec(id, t, html)).join("")}</div></div>
+      <nav class="pager" aria-label="التنقل بين السور">
+        ${n > 1 ? `<a class="btn" href="#${n - 1}">→ سورة ${esc(cards[n - 2].name)}</a>` : "<span></span>"}
+        ${n < 114 ? `<a class="btn" href="#${n + 1}">سورة ${esc(cards[n].name)} ←</a>` : ""}</nav>`;
+    watchToc();
+  }
+
+  let io;
+  function watchToc() {
+    io?.disconnect();
+    const links = [...document.querySelectorAll(".toc a")];
+    io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) links.forEach((a) => a.classList.toggle("on", a.dataset.sec === e.target.id));
+    }), { rootMargin: "-80px 0px -70% 0px" });
+    document.querySelectorAll(".sec[id]").forEach((s) => io.observe(s));
+  }
+
+  function route() {
+    const [n, part] = location.hash.slice(1).split("/");
+    const num = parseInt(n, 10);
+    if (num >= 1 && num <= 114) { render(num); if (part) document.getElementById(part)?.scrollIntoView(); else scrollTo({ top: 0 }); }
+    else { pick.value = ""; renderIndex(); }
+  }
+
+  fetch("data/surahs.json").then((r) => r.json()).then((data) => {
+    cards = data;
+    pick.innerHTML = '<option value="">اختر سورة</option>' + cards.map((c) => `<option value="${c.n}">${c.n}. ${esc(c.name)}</option>`).join("");
+    pick.addEventListener("change", () => { location.hash = pick.value ? "#" + pick.value : ""; });
+    addEventListener("hashchange", route);
+    route();
+  }).catch(() => { view.innerHTML = '<p class="b-empty">تعذّر تحميل بيانات البطاقات. أعد تحميل الصفحة.</p>'; });
+});
+</script>
+</body>
+</html>

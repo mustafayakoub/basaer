@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>مصحف التجويد الملوّن · بصائر</title>
+<meta name="description" content="مصحف التجويد الملوّن برواية حفص: المس أي حرف ملوّن ليظهر لك حكمه وتعريفه وأمثلته.">
+<meta property="og:title" content="مصحف التجويد الملوّن · بصائر">
+<meta property="og:description" content="المس الحرف الملوّن ليظهر لك حكمه.">
+<meta property="og:image" content="icons/og.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2b4f8c">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/basaer.css">
+<style>
+.page{display:grid;gap:18px;padding-block:24px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar select{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 10px}
+.key{display:flex;flex-wrap:wrap;gap:8px}
+.key button{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:.88rem;cursor:pointer}
+.key button[aria-pressed="false"]{opacity:.4}
+.key button:disabled{cursor:default;border-style:dashed}
+.key small{color:var(--muted)}
+.dot{width:11px;height:11px;border-radius:50%;flex:none}
+.solo{display:flex;gap:10px;align-items:center;background:var(--gold-soft);border-radius:10px;padding:8px 14px}
+.mushaf{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px clamp(14px,4vw,40px)}
+.mushaf h1{font-family:var(--f-quran);font-weight:400;text-align:center;font-size:2rem;color:var(--gold);margin-bottom:12px}
+#text{font-family:var(--f-quran);font-size:clamp(25px,3.4vw,33px);line-height:2.3;text-align:justify;text-align-last:center;overflow-wrap:break-word}
+#text .ay{scroll-margin-top:90px;border-radius:6px}
+#text .ay:target{background:var(--gold-soft)}
+#text [data-t]{cursor:pointer}
+.n{color:var(--gold);user-select:none}
+.guide{display:grid;gap:10px}
+.guide details{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 16px}
+.guide summary{cursor:pointer;display:flex;gap:10px;align-items:center;font-weight:600}
+.guide .ex{font-family:var(--f-quran);font-size:1.3rem;display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
+.guide p{margin-top:6px;max-width:75ch}
+</style>
+<style id="tj-colors"></style>
+</head>
+<body>
+<main class="wrap page" id="main" tabindex="-1">
+  <div class="bar">
+    <label for="sura">السورة</label><select id="sura"></select>
+    <a class="btn" id="prev" href="#">السابقة</a><a class="btn" id="next" href="#">التالية</a>
+    <a class="btn" id="card" href="surah.html">بطاقة السورة</a>
+  </div>
+  <div class="key" id="key" role="group" aria-label="مفتاح الألوان"></div>
+  <div class="solo" id="solo" hidden><span id="solo-t"></span><button class="btn" type="button" id="solo-x">اعرض كل الأحكام</button></div>
+  <article class="mushaf"><h1 id="head"></h1><div id="text" aria-live="polite"></div></article>
+  <section class="guide" id="guide" aria-labelledby="guide-h"><h2 id="guide-h">دليل أحكام التجويد في هذا المصحف</h2><p class="muted" id="guide-src"></p></section>
+</main>
+<script src="assets/basaer.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const B = window.Basaer;
+  const $ = (id) => document.getElementById(id);
+  let RULES, NAMES = [], current = 0, off = new Set(), solo = null, pop = null;
+  const ORDER = ["lazim", "mad45", "arid", "mad2", "ghunna", "qalqala", "silent", "tafkhim"];
+
+  function colors() {
+    const g = RULES.groups, tagCss = Object.entries(RULES.tags).map(([n, t]) => `#text .t${n}{color:var(--g-${t.group})}`).join("\n");
+    const light = ORDER.map((k) => `--g-${k}:${g[k].light}`).join(";"), dark = ORDER.map((k) => `--g-${k}:${g[k].dark}`).join(";");
+    $("tj-colors").textContent = `:root{${light}}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){${dark}}}:root[data-theme="dark"]{${dark}}\n${tagCss}
+      ${ORDER.map((k) => `#text.off-${k} .g-${k}{color:inherit}`).join("\n")}
+      #text.solo [data-t]:not(.pick){color:inherit}`;
+  }
+
+  function key() {
+    const k = $("key"); k.replaceChildren();
+    for (const g of ORDER) {
+      const info = RULES.groups[g], b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = `<span class="dot" style="background:var(--g-${g})"></span>${B.esc(info.ar)}${info.counts ? ` <small>${B.esc(info.counts)}</small>` : ""}`;
+      if (info.missing) { b.disabled = true; b.title = info.missing; b.setAttribute("aria-pressed", "false"); }
+      else {
+        b.setAttribute("aria-pressed", String(!off.has(g)));
+        b.addEventListener("click", () => { off.has(g) ? off.delete(g) : off.add(g); applyFilters(); key(); });
+      }
+      k.append(b);
+    }
+  }
+
+  function applyFilters() {
+    const t = $("text");
+    t.className = [...off].map((g) => "off-" + g).join(" ") + (solo ? " solo" : "");
+    t.querySelectorAll(".pick").forEach((e) => e.classList.remove("pick"));
+    if (solo) t.querySelectorAll(`[data-t="${solo}"]`).forEach((e) => e.classList.add("pick"));
+    $("solo").hidden = !solo;
+    if (solo) $("solo-t").textContent = `تعرض الآن حكم «${RULES.tags[solo].ar}» وحده (${B.arNum(t.querySelectorAll(".pick").length)} موضعًا في السورة).`;
+  }
+
+  async function show(s, aya) {
+    if (s < 1 || s > 114) s = 1;
+    current = s; $("sura").value = s; $("head").textContent = "سورة " + NAMES[s - 1];
+    $("prev").href = "#s" + Math.max(1, s - 1); $("next").href = "#s" + Math.min(114, s + 1); $("card").href = "surah.html#" + s;
+    document.title = `سورة ${NAMES[s - 1]} · مصحف التجويد · بصائر`;
+    $("text").textContent = "…";
+    const ayat = await (await fetch(`data/tajweed/${s}.json`)).json();
+    $("text").innerHTML = ayat.map((t, i) => {
+      const html = B.esc(t).replace(/&lt;(\d+)&gt;/g, (m, n) => `<span class="t${n} g-${RULES.tags[n].group}" data-t="${n}">`).replace(/&lt;\/\d+&gt;/g, "</span>");
+      return `<span class="ay" id="a${s}-${i + 1}" data-sura="${s}" data-aya="${i + 1}" data-sura-name="${B.esc(NAMES[s - 1])}">${html} <span class="n" aria-label="الآية ${i + 1}">﴿${B.toArDigits(i + 1)}﴾</span></span> `;
+    }).join("");
+    applyFilters();
+    // Line heights change once the Quran font arrives; jump only after it has loaded.
+    await document.fonts.load('32px "KFGQPC Hafs"').catch(() => null);
+    if (aya) goTo(s, aya); else scrollTo({ top: 0, behavior: "instant" });
+  }
+
+  function goTo(s, aya) {
+    document.getElementById(`a${s}-${aya}`)?.scrollIntoView({ block: "center", behavior: "instant" });
+  }
+
+  function closePop() { pop?.remove(); pop = null; }
+  let popY = 0;
+  function openPop(target) {
+    closePop();
+    popY = scrollY;
+    const n = target.dataset.t, r = RULES.tags[n], g = RULES.groups[r.group];
+    pop = document.createElement("div");
+    pop.className = "b-pop"; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-label", r.ar);
+    pop.innerHTML = `<h3><span class="dot" style="background:var(--g-${r.group})"></span>${B.esc(r.ar)}</h3>
+      ${g.counts ? `<div class="muted">${B.esc(g.counts)}</div>` : ""}
+      <p>${B.esc(r.definition)}</p>
+      <details><summary>التفصيل</summary><p style="margin-top:6px">${B.esc(r.details)}</p></details>
+      <div class="ex">${r.examples.map((e) => `<span>${B.esc(e)}</span>`).join("")}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="button" data-solo="${n}">اعرض هذا الحكم وحده</button><a class="btn" href="#rule-${n}">في دليل الأحكام</a></div>`;
+    document.body.append(pop);
+    const r0 = target.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+    const left = Math.min(Math.max(16, r0.left + r0.width / 2 - w / 2), innerWidth - w - 16);
+    const top = r0.bottom + 8 + h > innerHeight ? Math.max(16, r0.top - h - 8) : r0.bottom + 8;
+    pop.style.left = left + "px"; pop.style.top = top + "px";
+    pop.querySelector("[data-solo]").addEventListener("click", () => { solo = n; applyFilters(); closePop(); });
+  }
+
+  function guide() {
+    $("guide-src").textContent = RULES.definitions_source;
+    const counts = {};
+    const html = Object.entries(RULES.tags).map(([n, r]) => `<details id="rule-${n}"><summary><span class="dot" style="background:var(--g-${r.group})"></span>${B.esc(r.ar)} <small class="muted">${B.esc(RULES.groups[r.group].counts || "")}</small></summary>
+      <p><b>تعريفه:</b> ${B.esc(r.definition)}</p><p>${B.esc(r.details)}</p>
+      <div class="ex">${r.examples.map((e) => `<span>${B.esc(e)}</span>`).join("")}</div></details>`).join("");
+    const t = RULES.groups.tafkhim;
+    $("guide").insertAdjacentHTML("beforeend", html + `<details><summary><span class="dot" style="background:var(--g-tafkhim)"></span>التفخيم <small class="muted">لم يُلوَّن بعد</small></summary><p>${B.esc(t.definition)}</p></details>`);
+  }
+
+  function route() {
+    const rule = location.hash.match(/^#rule-(\d+)$/);
+    if (rule) { const d = document.getElementById("rule-" + rule[1]); if (d) { d.open = true; d.scrollIntoView(); } return; }
+    const m = location.hash.match(/^#(?:s(\d+)|a(\d+)-(\d+))$/);
+    const s = m ? +(m[1] || m[2]) : current || 1, a = m && m[3] ? +m[3] : 0;
+    if (s !== current) show(s, a); else if (a) goTo(s, a);
+  }
+
+  Promise.all([fetch("data/tajweed-rules.json").then((r) => r.json()), fetch("data/surahs.json").then((r) => r.json())]).then(([rules, cards]) => {
+    RULES = rules; NAMES = cards.map((c) => c.name);
+    $("sura").innerHTML = NAMES.map((n, i) => `<option value="${i + 1}">${i + 1}. ${B.esc(n)}</option>`).join("");
+    $("sura").addEventListener("change", () => { location.hash = "#s" + $("sura").value; });
+    colors(); key(); guide();
+    $("solo-x").addEventListener("click", () => { solo = null; applyFilters(); });
+    $("text").addEventListener("click", (e) => { const t = e.target.closest("[data-t]"); if (t) { e.stopPropagation(); openPop(t); } });
+    document.addEventListener("click", (e) => { if (pop && !pop.contains(e.target)) closePop(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closePop(); });
+    // Close on a real scroll only; small or smooth-scroll movements keep it open.
+    addEventListener("scroll", () => { if (pop && Math.abs(scrollY - popY) > 60) closePop(); }, { passive: true });
+    addEventListener("hashchange", route);
+    route();
+  }).catch(() => { $("text").innerHTML = '<p class="b-empty">تعذّر تحميل المصحف. أعد تحميل الصفحة.</p>'; });
+});
+</script>
+</body>
+</html>

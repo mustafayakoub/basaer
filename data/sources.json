@@ -1,0 +1,94 @@
+{
+ "updated": "2026-10-14",
+ "note": "سجل مصادر بيانات بصائر. status: confirmed = المصدر معروف من الملف نفسه أو من اسمه الرسمي؛ to_confirm = يحتاج تأكيد المصدر أو الترخيص من صاحب المشروع. لا يُنشر ترخيص لم يُتحقق من نصه.",
+ "groups": [
+  {
+   "id": "quran-text",
+   "title": "نصوص المصاحف والروايات",
+   "items": [
+    {
+     "title": "نصوص الروايات الست: حفص، شعبة، قالون، ورش، الدوري، السوسي",
+     "publisher": "مجمع الملك فهد لطباعة المصحف الشريف",
+     "files": ["data/ayat/hafsData_v2-0.json", "data/ayat/shubaData_v2-0.json", "data/ayat/QalounData_v2-1.json", "data/ayat/warshData_v2-1.json", "data/ayat/DouriData_v2-0.json", "data/ayat/SousiData_v2-0.json"],
+     "license": "شروط استخدام بيانات المجمع وخطوطه",
+     "license_url": "",
+     "status": "to_confirm",
+     "our_work": "صُحّح رمز رقم الآية 2:286 في ملف شعبة، وفُحصت رموز أرقام الآيات في الملفات الستة."
+    },
+    {
+     "title": "نص التجويد الملوّن لرواية حفص",
+     "publisher": "",
+     "files": ["data/ayat/quran_text_with_tajweed.json"],
+     "license": "",
+     "license_url": "",
+     "status": "to_confirm",
+     "our_work": "فُكّت الوسوم الثمانية عشر، وصُحّح 1111 وسمًا في المدين المتصل والمنفصل، وقوبلت حروف كل آية بنص المجمع، وأُضيف تعريف كل حكم. الناتج quran_text_with_tajweed_v2.json."
+    },
+    {
+     "title": "النصوص الإملائية والمختصرة",
+     "publisher": "",
+     "files": ["data/ayat/Emalei_-Mushakkal_fasel.txt", "data/ayat/Emalei_-No-Mushakkal_fasel.txt", "data/ayat/Emalei_-Mini_Mushakkal_fasel.txt", "data/ayat/quran-uthmani-min_-Mushakkal.txt", "data/ayat/Amiry-Mushakkal.txt", "data/ayat/AlAWWal.txt", "data/ayat/Ajami-.txt"],
+     "license": "",
+     "license_url": "",
+     "status": "to_confirm",
+     "our_work": ""
+    }
+   ]
+  },
+  {
+   "id": "fonts",
+   "title": "الخطوط",
+   "items": [
+    {
+     "title": "خط مصحف المدينة لرواية حفص (UthmanicHafs V22)، وخطوط عثمان طه والكوفي والجليل",
+     "publisher": "مجمع الملك فهد لطباعة المصحف الشريف",
+     "files": ["data/fonts/UthmanicHafs_V22.ttf", "data/fonts/UthmanTN_v2-0.ttf", "data/fonts/KFGQPC-KufiStyV14.ttf", "data/fonts/AlJalil_v01.ttf"],
+     "license": "شروط استخدام خطوط المجمع",
+     "license_url": "",
+     "status": "to_confirm",
+     "our_work": ""
+    },
+    {
+     "title": "خط الرباط المغربي، وخط المصحف الباكستاني، وخط DQ7 الكوفي",
+     "publisher": "",
+     "files": ["data/fonts/Magreb_rabat.ttf", "data/fonts/Al Mushaf_pakistan.ttf", "data/fonts/DQ7_KFI_M1.ttf"],
+     "license": "",
+     "license_url": "",
+     "status": "to_confirm",
+     "our_work": ""
+    }
+   ]
+  },
+  {
+   "id": "words",
+   "title": "علوم الكلمة",
+   "items": [
+    {
+     "title": "إعراب الكلمات وصرفها ورسمها ومعانيها وإحصاؤها (77,432 كلمة)",
+     "publisher": "",
+     "files": ["data/words/word_content_irab.json", "data/words/word_content_sarf.json", "data/words/word_content_rasm.json", "data/words/word_content_meaning.json", "data/words/word_statistics.json"],
+     "license": "",
+     "license_url": "",
+     "status": "to_confirm",
+     "our_work": ""
+    }
+   ]
+  },
+  {
+   "id": "surahs",
+   "title": "بطاقات السور",
+   "items": [
+    {
+     "title": "جدول السور: النزول ومراحله والمقاصد وأسباب النزول والفضائل والناسخ والمنسوخ",
+     "publisher": "إعداد مصطفى يعقوب",
+     "files": ["data/surahs/suar_quran_Mustafa_Yakoub.xlsx"],
+     "license": "",
+     "license_url": "",
+     "status": "confirmed",
+     "our_work": "جمعٌ وتحرير، مع فصل ما صحّ من الفضائل عما ضعُف، وإحالة كل حديث إلى مخرّجه. المصادر المذكورة في البطاقات مسرودة أدناه آليًّا من الإحالات.",
+     "fields_to_confirm": ["سبب النزول المختصر من قاعدة البيانات: أي قاعدة؟", "الملاحظات الإنجليزية (surahRemarks): من أي ترجمة أو كتاب؟"]
+    }
+   ]
+  }
+ ]
+}
