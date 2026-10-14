@@ -1,0 +1,15 @@
+{
+  "note": "Each KFGQPC riwaya text is encoded for its own KFGQPC font: the ayah-number glyphs (U+FC00 + ayah - 1) and riwaya marks (ے in Warsh/Qaloun, ۟ in Douri/Sousi, ٜ in Shuba) only shape correctly with that font. expected_family is matched against the font's full name. Run tools/fonts/check_fonts.py after adding a font.",
+  "fallback_font": "UthmanicHafs_V22.ttf",
+  "riwayat": {
+    "hafs":    {"ar": "حفص",    "count": "الكوفي",        "data": "data/ayat/hafsData_v2-0.json",   "expected_family": "KFGQPC HAFS Uthmanic Script"},
+    "tajweed": {"ar": "التجويد", "count": "الكوفي",        "data": "data/ayat/quran_text_with_tajweed_v2.json", "expected_family": "KFGQPC HAFS Uthmanic Script"},
+    "shouba":  {"ar": "شعبة",   "count": "الكوفي",        "data": "data/ayat/shubaData_v2-0.json",  "expected_family": "Shouba"},
+    "qaloun":  {"ar": "قالون",  "count": "المدني الأخير", "data": "data/ayat/QalounData_v2-1.json", "expected_family": "Qaloun"},
+    "warsh":   {"ar": "ورش",    "count": "المدني الأخير", "data": "data/ayat/warshData_v2-1.json",  "expected_family": "Warsh"},
+    "bazzi":   {"ar": "البزي",  "count": "المكي",         "data": null,                             "expected_family": "Bazzi"},
+    "qumbul":  {"ar": "قنبل",   "count": "المكي",         "data": null,                             "expected_family": "Qumbul"},
+    "douri":   {"ar": "الدوري", "count": "البصري",        "data": "data/ayat/DouriData_v2-0.json",  "expected_family": "Douri"},
+    "sousi":   {"ar": "السوسي", "count": "البصري",        "data": "data/ayat/SousiData_v2-0.json",  "expected_family": "Sousi"}
+  }
+}

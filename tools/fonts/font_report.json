@@ -1,0 +1,230 @@
+{
+ "fonts_in_repo": {
+  "Al Mushaf_pakistan.ttf": "Al_Mushaf",
+  "AlJalilDot_v01.ttf": "KFGQPC AlJalil Dot",
+  "AlJalil_v01.ttf": "KFGQPC AlJalil",
+  "DQ7_KFI_M1.ttf": "DQ7 Quran Koufi A",
+  "KFGQPC-KufiExtV14.ttf": "KFGQPC Kufi Extended Regular",
+  "KFGQPC-KufiStyV14.ttf": "KFGQPC Kufi Stylistic Regular",
+  "KFGQPCAnBold.ttf": "KFGQPC AN Regular Bold",
+  "KFGQPCAnExtra.ttf": "KFGQPC AN Extra Bold",
+  "KFGQPCAnLight.ttf": "KFGQPC AN Light",
+  "KFGQPCAnRegular.ttf": "KFGQPC AN Regular Regular",
+  "Magreb_rabat.ttf": "Rabat",
+  "UthmanTN1 Ver10.otf": "KFGQPC Uthman Taha Naskh",
+  "UthmanTNB_v2-0.ttf": "KFGQPC Uthman Taha Naskh Bold",
+  "UthmanTN_v2-0.ttf": "KFGQPC Uthman Taha Naskh",
+  "UthmanicHafs1 Ver18.ttf": "KFGQPC HAFS Uthmanic Script Regular",
+  "UthmanicHafs_V22.ttf": "KFGQPC HAFS Uthmanic Script Regular",
+  "uthmanic_hafs_v22.ttf": "kfgqpc_hafs_uthmanic_script Regular"
+ },
+ "riwayat": {
+  "hafs": {
+   "data": "data/ayat/hafsData_v2-0.json",
+   "expected_family": "KFGQPC HAFS Uthmanic Script",
+   "tested": {
+    "UthmanicHafs1 Ver18.ttf": {
+     "failing_ayat": 0,
+     "first": []
+    },
+    "UthmanicHafs_V22.ttf": {
+     "failing_ayat": 0,
+     "first": []
+    }
+   },
+   "status": "ok",
+   "font": "UthmanicHafs1 Ver18.ttf"
+  },
+  "tajweed": {
+   "data": "data/ayat/quran_text_with_tajweed_v2.json",
+   "expected_family": "KFGQPC HAFS Uthmanic Script",
+   "tested": {
+    "UthmanicHafs1 Ver18.ttf": {
+     "failing_ayat": 0,
+     "first": []
+    },
+    "UthmanicHafs_V22.ttf": {
+     "failing_ayat": 0,
+     "first": []
+    }
+   },
+   "status": "ok",
+   "font": "UthmanicHafs1 Ver18.ttf"
+  },
+  "shouba": {
+   "data": "data/ayat/shubaData_v2-0.json",
+   "expected_family": "Shouba",
+   "tested": {
+    "UthmanicHafs_V22.ttf": {
+     "failing_ayat": 60,
+     "first": [
+      [
+       6,
+       76
+      ],
+      [
+       6,
+       77
+      ],
+      [
+       6,
+       78
+      ],
+      [
+       8,
+       17
+      ],
+      [
+       9,
+       109
+      ]
+     ]
+    }
+   },
+   "status": "font_missing",
+   "font": null
+  },
+  "qaloun": {
+   "data": "data/ayat/QalounData_v2-1.json",
+   "expected_family": "Qaloun",
+   "tested": {
+    "UthmanicHafs_V22.ttf": {
+     "failing_ayat": 2170,
+     "first": [
+      [
+       2,
+       9
+      ],
+      [
+       2,
+       10
+      ],
+      [
+       2,
+       14
+      ],
+      [
+       2,
+       16
+      ],
+      [
+       2,
+       18
+      ]
+     ]
+    }
+   },
+   "status": "font_missing",
+   "font": null
+  },
+  "warsh": {
+   "data": "data/ayat/warshData_v2-1.json",
+   "expected_family": "Warsh",
+   "tested": {
+    "UthmanicHafs_V22.ttf": {
+     "failing_ayat": 2228,
+     "first": [
+      [
+       2,
+       9
+      ],
+      [
+       2,
+       10
+      ],
+      [
+       2,
+       14
+      ],
+      [
+       2,
+       16
+      ],
+      [
+       2,
+       18
+      ]
+     ]
+    }
+   },
+   "status": "font_missing",
+   "font": null
+  },
+  "bazzi": {
+   "data": null,
+   "expected_family": "Bazzi",
+   "status": "data_missing"
+  },
+  "qumbul": {
+   "data": null,
+   "expected_family": "Qumbul",
+   "status": "data_missing"
+  },
+  "douri": {
+   "data": "data/ayat/DouriData_v2-0.json",
+   "expected_family": "Douri",
+   "tested": {
+    "UthmanicHafs_V22.ttf": {
+     "failing_ayat": 160,
+     "first": [
+      [
+       2,
+       20
+      ],
+      [
+       2,
+       33
+      ],
+      [
+       2,
+       34
+      ],
+      [
+       2,
+       39
+      ],
+      [
+       2,
+       46
+      ]
+     ]
+    }
+   },
+   "status": "font_missing",
+   "font": null
+  },
+  "sousi": {
+   "data": "data/ayat/SousiData_v2-0.json",
+   "expected_family": "Sousi",
+   "tested": {
+    "UthmanicHafs_V22.ttf": {
+     "failing_ayat": 160,
+     "first": [
+      [
+       2,
+       20
+      ],
+      [
+       2,
+       33
+      ],
+      [
+       2,
+       34
+      ],
+      [
+       2,
+       39
+      ],
+      [
+       2,
+       46
+      ]
+     ]
+    }
+   },
+   "status": "font_missing",
+   "font": null
+  }
+ }
+}

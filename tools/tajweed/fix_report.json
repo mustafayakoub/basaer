@@ -1,0 +1,14 @@
+{
+ "spans": 5166,
+ "changed": 1111,
+ "by_case": {
+  "open6_close6_to6": 2029,
+  "open6_close6_to18": 445,
+  "open6_close18_to18": 418,
+  "open18_close6_to6": 154,
+  "open18_close6_to18": 94,
+  "open18_close18_to18": 2026
+ },
+ "kfgqpc_marks_swapped": 7,
+ "unresolved_kept_closing_tag": []
+}

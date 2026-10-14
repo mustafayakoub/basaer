@@ -1,0 +1,34 @@
+{
+  "source": "data/ayat/quran_text_with_tajweed.json",
+  "format": "Inline numeric tags <N>…</N> around the letters a rule applies to. Text is Tanzil-style Uthmani (ى dotless, ْ sukun, ً tanween), not the KFGQPC encoding used by hafsData_v2-0.json.",
+  "groups": {
+    "lazim":   {"ar": "مد لازم", "counts": "6 حركات", "light": "#8a1222", "dark": "#ff7a85"},
+    "mad45":   {"ar": "مد واجب متصل وجائز منفصل", "counts": "4 أو 5 حركات", "light": "#d0202e", "dark": "#ff9c8f"},
+    "arid":    {"ar": "مد عارض للسكون", "counts": "2 أو 4 أو 6 حركات", "light": "#e06a00", "dark": "#ffb35c"},
+    "mad2":    {"ar": "مد طبيعي", "counts": "حركتان", "light": "#a87b00", "dark": "#e8c45a"},
+    "ghunna":  {"ar": "غنة وإخفاء وإقلاب وإدغام بغنة", "counts": "حركتان", "light": "#1e8a3c", "dark": "#6fd28b"},
+    "silent":  {"ar": "ما لا يُلفظ والإدغام بلا غنة", "counts": "", "light": "#8a8f98", "dark": "#8d939e"},
+    "qalqala": {"ar": "قلقلة", "counts": "", "light": "#1b86c9", "dark": "#68c1f5"},
+    "tafkhim": {"ar": "تفخيم", "counts": "", "light": "#1f3fae", "dark": "#93a8ff", "missing": "لا يوجد له وسم في الملف؛ يحتاج توليدًا بقواعد مستقلة"}
+  },
+  "tags": {
+    "1":  {"ar": "همزة الوصل", "en": "hamzat_wasl", "group": "silent", "note": "تُكتب ولا تُلفظ في الوصل"},
+    "2":  {"ar": "اللام الشمسية", "en": "lam_shamsiyya", "group": "silent", "note": "لام التعريف قبل حرف شمسي مشدد"},
+    "3":  {"ar": "مد طبيعي بالألف الخنجرية أو حرف مد صغير", "en": "madd_tabii", "group": "mad2"},
+    "4":  {"ar": "مد عارض للسكون", "en": "madd_arid", "group": "arid", "note": "كل مواضعه (4543) في آخر الآية، وتسعة منها قبل علامة السجدة ۩"},
+    "5":  {"ar": "مد لازم", "en": "madd_lazim", "group": "lazim", "note": "الكلمي (الضآلين) والحرفي في فواتح السور (الٓمٓ)"},
+    "6":  {"ar": "مد واجب متصل", "en": "madd_muttasil", "group": "mad45", "note": "الهمز في الكلمة المكتوبة نفسها؛ ومنه «يا» النداء و«ها» التنبيه الموصولتان رسمًا (منفصل حكمي عند القراء، ولونه واحد)"},
+    "7":  {"ar": "غنة النون والميم المشددتين", "en": "ghunna", "group": "ghunna"},
+    "8":  {"ar": "قلقلة", "en": "qalqala", "group": "qalqala", "note": "حروف قطب جد"},
+    "9":  {"ar": "إدغام بغنة", "en": "idgham_ghunna", "group": "ghunna", "note": "النون الساكنة والتنوين قبل ي ن م و"},
+    "10": {"ar": "إخفاء حقيقي", "en": "ikhfa", "group": "ghunna"},
+    "11": {"ar": "إدغام بلا غنة", "en": "idgham_no_ghunna", "group": "silent", "note": "النون الساكنة والتنوين قبل ل ر"},
+    "12": {"ar": "إخفاء شفوي", "en": "ikhfa_shafawi", "group": "ghunna", "note": "الميم الساكنة قبل الباء"},
+    "13": {"ar": "حرف لا يُلفظ", "en": "silent", "group": "silent", "note": "الألف الفارقة وواو أولئك ونحوها"},
+    "14": {"ar": "إقلاب", "en": "iqlab", "group": "ghunna"},
+    "15": {"ar": "إدغام شفوي", "en": "idgham_shafawi", "group": "ghunna", "note": "الميم الساكنة قبل الميم"},
+    "16": {"ar": "إدغام متجانسين", "en": "idgham_mutajanisayn", "group": "silent"},
+    "17": {"ar": "إدغام متقاربين", "en": "idgham_mutaqaribayn", "group": "silent"},
+    "18": {"ar": "مد جائز منفصل", "en": "madd_munfasil", "group": "mad45", "note": "حرف المد آخر كلمة والهمز أول التي بعدها"}
+  }
+}
