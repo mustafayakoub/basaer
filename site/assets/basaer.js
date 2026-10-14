@@ -16,7 +16,7 @@
       x: "", youtube: "", telegram: "", facebook: "", instagram: "", whatsapp: "", tiktok: ""
     },
     nav: [
-      ["index.html", "الرئيسية"], ["tajweed.html", "مصحف التجويد"], ["surah.html", "بطاقات السور"],
+      ["./", "الرئيسية"], ["tajweed.html", "مصحف التجويد"], ["surah.html", "بطاقات السور"],
       ["sources.html", "المصادر والتراخيص"], ["install.html", "ثبّت الموقع"]
     ],
     sections: [
@@ -58,8 +58,8 @@
   /* ---------- header and footer ---------- */
   function header() {
     const here = location.pathname.split("/").pop() || "index.html";
-    const links = CONFIG.nav.map(([href, label]) => `<a href="${href}"${href === here ? ' aria-current="page"' : ""}>${label}</a>`).join("");
-    document.body.prepend(el(`<header class="b-header"><div class="wrap"><a class="b-brand" href="index.html">${CONFIG.siteName}</a><nav class="b-nav" aria-label="أقسام الموقع">${links}</nav></div></header>`));
+    const links = CONFIG.nav.map(([href, label]) => `<a href="${href}"${(href === "./" ? "index.html" : href) === here ? ' aria-current="page"' : ""}>${label}</a>`).join("");
+    document.body.prepend(el(`<header class="b-header"><div class="wrap"><a class="b-brand" href="./">${CONFIG.siteName}</a><nav class="b-nav" aria-label="أقسام الموقع">${links}</nav></div></header>`));
   }
 
   function footer() {
